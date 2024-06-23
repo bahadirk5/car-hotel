@@ -1,0 +1,27 @@
+{
+  "version": "6",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1719050404975,
+      "tag": "0000_nervous_pandemic",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1719056521842,
+      "tag": "0001_short_doctor_octopus",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1719141251235,
+      "tag": "0002_mushy_cassandra_nova",
+      "breakpoints": true
+    }
+  ]
+}
