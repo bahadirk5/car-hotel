@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
         <Providers>{children}</Providers>
-        <Toaster />
+        <Toaster position="top-center" richColors />
       </body>
     </html>
   );

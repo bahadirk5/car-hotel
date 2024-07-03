@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const carFormSchema = z.object({
+  id: z.number().optional(),
   segment_id: z.coerce
     .number()
     .int()

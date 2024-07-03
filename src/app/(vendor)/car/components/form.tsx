@@ -7,7 +7,7 @@ import { ChevronLeft, Loader2Icon } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -33,35 +33,54 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { createCar } from "./actions";
+import { upsertCar } from "../actions";
 import { carFormSchema } from "./schema";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export function CarForm({
   segments,
+  data,
 }: {
   segments: { id: number; name: string }[];
+  data?: {
+    id: number;
+    segment_id: number;
+    brand: string;
+    model: string;
+    year: number;
+    license_plate: string;
+    mileage: number;
+    transmission: "Automatic" | "Manual";
+    status: "available" | "rented" | "maintenance" | "reserved" | "unlisted";
+    fuel_type: "Gasoline" | "Diesel" | "Electric";
+    seat_count: number;
+  };
 }) {
   const form = useForm<z.infer<typeof carFormSchema>>({
     resolver: zodResolver(carFormSchema),
     defaultValues: {
-      segment_id: undefined,
-      brand: "",
-      model: "",
-      year: undefined,
-      license_plate: "",
-      mileage: 0,
-      transmission: "Automatic",
-      fuel_type: "Gasoline",
-      seat_count: undefined,
+      segment_id: data?.segment_id || undefined,
+      brand: data?.brand || "",
+      model: data?.model || "",
+      year: data?.year || undefined,
+      license_plate: data?.license_plate || "",
+      mileage: data?.mileage || 0,
+      transmission: data?.transmission || "Automatic",
+      fuel_type: data?.fuel_type || "Gasoline",
+      seat_count: data?.seat_count || undefined,
     },
   });
 
   function onSubmit(values: z.infer<typeof carFormSchema>) {
-    create_car(values);
+    if (data) {
+      values.id = data.id;
+    }
+    upsert_car(values);
   }
 
-  const { isPending, mutate: create_car } = useMutation({
-    mutationFn: createCar,
+  const { isPending, mutate: upsert_car } = useMutation({
+    mutationFn: upsertCar,
     onSuccess: () => {
       toast.success("Car created successfully");
     },
@@ -86,15 +105,17 @@ export function CarForm({
             <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
               <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
                 <div className="sticky top-0 z-20 flex items-center gap-4 py-2 backdrop-blur">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    className="h-7 w-7"
+                  <Link
+                    href="/vendor-dashboard/car-list"
+                    className={cn(
+                      buttonVariants({ variant: "outline", size: "icon" }),
+                      "h-7 w-7",
+                    )}
                   >
                     <ChevronLeft className="h-4 w-4" />
                     <span className="sr-only">Back</span>
-                  </Button>
+                  </Link>
+
                   <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
                     Car Info
                   </h1>

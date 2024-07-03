@@ -29,11 +29,23 @@ export const cars = createTable(
     brand: varchar("brand", { length: 100 }).notNull(), // Car brand
     model: varchar("model", { length: 100 }).notNull(), // Car model
     year: integer("year").notNull(), // Car manufacturing year
-    license_plate: varchar("license_plate", { length: 10 }).notNull().unique(), // Unique license plate number
-    transmission: varchar("transmission", { length: 50 }).notNull(), // Transmission type
-    fuel_type: varchar("fuel_type", { length: 50 }).notNull(), // Fuel type
+    license_plate: varchar("license_plate", { length: 30 }).notNull().unique(), // Unique license plate number
+    transmission: varchar("transmission", {
+      length: 15,
+      enum: ["Automatic", "Manual"],
+    }).notNull(), // Transmission type
+    fuel_type: varchar("fuel_type", {
+      length: 15,
+      enum: ["Gasoline", "Diesel", "Electric"],
+    }).notNull(), // Fuel type
     seat_count: integer("seat_count").notNull(), // Seat count
     mileage: integer("mileage").notNull(), // Car mileage
+    status: varchar("status", {
+      length: 15,
+      enum: ["available", "rented", "maintenance", "reserved", "unlisted"],
+    })
+      .notNull()
+      .default("unlisted"),
     created_at: timestamp("created_at", { withTimezone: true })
       .defaultNow()
       .notNull(), // Timestamp for record creation

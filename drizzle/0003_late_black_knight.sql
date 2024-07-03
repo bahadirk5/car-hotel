@@ -1,0 +1,1 @@
+ALTER TABLE "car_hotel_cars" ADD COLUMN "status" varchar(20) DEFAULT 'unlisted' NOT NULL;

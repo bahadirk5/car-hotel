@@ -5,7 +5,9 @@ import { segments } from "@/server/db/schema";
 import { cars } from "@/server/db/schema";
 import { z } from "zod";
 import { eq } from "drizzle-orm";
-import { carFormSchema } from "./schema";
+import { carFormSchema } from "./components/schema";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 // Function to get all segments
 export async function getSegments() {
@@ -19,23 +21,35 @@ export async function getSegments() {
   }
 }
 
-// Function to create a new car
-export async function createCar(values: z.infer<typeof carFormSchema>) {
-  // Check if the license plate already exists
-  console.log("values", values.license_plate);
+// Function to fetch car data by ID for editing
+export async function getCar(carId: number) {
+  try {
+    const car = await db.query.cars.findFirst({ where: eq(cars.id, carId) });
 
+    if (!car) {
+      throw new Error("Car not found");
+    }
+
+    return car;
+  } catch (error) {
+    console.error("Error fetching car data:", error);
+    throw new Error("Could not fetch car data");
+  }
+}
+
+// Function to create a new car
+export async function upsertCar(values: z.infer<typeof carFormSchema>) {
+  // Check if the license plate already exists
   const existingCar = await db.query.cars.findFirst({
     where: eq(cars.license_plate, values.license_plate),
   });
 
-  console.log("existingCar", existingCar);
-
-  if (existingCar) {
-    throw new Error("License plate already exists");
+  if (existingCar && existingCar.id !== values.id) {
+    throw new Error("License plate already exists for another car");
   }
 
   try {
-    const newCar = await db
+    await db
       .insert(cars)
       .values({
         segment_id: values.segment_id,
@@ -50,11 +64,24 @@ export async function createCar(values: z.infer<typeof carFormSchema>) {
         created_at: new Date(),
         updated_at: new Date(),
       })
-      .returning();
-
-    return newCar;
+      .onConflictDoUpdate({
+        target: cars.license_plate,
+        set: {
+          segment_id: values.segment_id,
+          brand: values.brand,
+          model: values.model,
+          year: values.year,
+          mileage: values.mileage,
+          transmission: values.transmission,
+          fuel_type: values.fuel_type,
+          seat_count: values.seat_count,
+          updated_at: new Date(),
+        },
+      });
   } catch (error) {
     console.error("Error creating car:", error);
     throw new Error("Could not create car");
   }
+  revalidatePath("/vendor-dashboard/car-list");
+  redirect("/vendor-dashboard/car-list");
 }
