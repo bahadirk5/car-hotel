@@ -51,9 +51,9 @@ export function CarForm({
     year: number;
     license_plate: string;
     mileage: number;
-    transmission: "Automatic" | "Manual";
+    transmission: "automatic" | "manual";
     status: "available" | "rented" | "maintenance" | "reserved" | "unlisted";
-    fuel_type: "Gasoline" | "Diesel" | "Electric";
+    fuel_type: "gasoline" | "diesel" | "electric";
     seat_count: number;
   };
 }) {
@@ -66,8 +66,8 @@ export function CarForm({
       year: data?.year || undefined,
       license_plate: data?.license_plate || "",
       mileage: data?.mileage || 0,
-      transmission: data?.transmission || "Automatic",
-      fuel_type: data?.fuel_type || "Gasoline",
+      transmission: data?.transmission || "automatic",
+      fuel_type: data?.fuel_type || "gasoline",
       seat_count: data?.seat_count || undefined,
     },
   });
@@ -262,10 +262,10 @@ export function CarForm({
                                     </SelectTrigger>
                                   </FormControl>
                                   <SelectContent>
-                                    <SelectItem value="Automatic">
+                                    <SelectItem value="automatic">
                                       Automatic
                                     </SelectItem>
-                                    <SelectItem value="Manual">
+                                    <SelectItem value="manual">
                                       Manual
                                     </SelectItem>
                                   </SelectContent>
@@ -293,13 +293,13 @@ export function CarForm({
                                     </SelectTrigger>
                                   </FormControl>
                                   <SelectContent>
-                                    <SelectItem value="Gasoline">
+                                    <SelectItem value="gasoline">
                                       Gasoline
                                     </SelectItem>
-                                    <SelectItem value="Diesel">
+                                    <SelectItem value="diesel">
                                       Diesel
                                     </SelectItem>
-                                    <SelectItem value="Electric">
+                                    <SelectItem value="electric">
                                       Electric
                                     </SelectItem>
                                   </SelectContent>

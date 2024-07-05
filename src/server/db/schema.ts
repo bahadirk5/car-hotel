@@ -32,11 +32,11 @@ export const cars = createTable(
     license_plate: varchar("license_plate", { length: 30 }).notNull().unique(), // Unique license plate number
     transmission: varchar("transmission", {
       length: 15,
-      enum: ["Automatic", "Manual"],
+      enum: ["automatic", "manual"],
     }).notNull(), // Transmission type
     fuel_type: varchar("fuel_type", {
       length: 15,
-      enum: ["Gasoline", "Diesel", "Electric"],
+      enum: ["gasoline", "diesel", "electric"],
     }).notNull(), // Fuel type
     seat_count: integer("seat_count").notNull(), // Seat count
     mileage: integer("mileage").notNull(), // Car mileage

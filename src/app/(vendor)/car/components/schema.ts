@@ -26,10 +26,10 @@ export const carFormSchema = z.object({
   mileage: z.coerce.number().int().nonnegative({
     message: "Mileage must be a non-negative integer.",
   }),
-  transmission: z.enum(["Automatic", "Manual"], {
+  transmission: z.enum(["automatic", "manual"], {
     message: "Transmission must be either 'Automatic' or 'Manual'.",
   }),
-  fuel_type: z.enum(["Gasoline", "Diesel", "Electric"], {
+  fuel_type: z.enum(["gasoline", "diesel", "electric"], {
     message: "Fuel type must be either 'Gasoline', 'Diesel', or 'Electric'.",
   }),
   seat_count: z.coerce.number().int().positive({

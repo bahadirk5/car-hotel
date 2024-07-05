@@ -16,7 +16,7 @@ export function MarketingHeader() {
         </div>
         <div className="hidden items-center gap-2 md:flex">
           <Link
-            href="/vendor-dashboard"
+            href="/vendor-dashboard/car-list"
             className={buttonVariants({ variant: "outline" })}
           >
             Login
