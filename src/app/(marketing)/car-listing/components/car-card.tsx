@@ -6,7 +6,7 @@ export function CarCard({
   id,
   brand,
   model,
-  segment_id,
+  segment,
   transmission,
   fuel_type,
   seat,
@@ -14,9 +14,9 @@ export function CarCard({
   id: number;
   brand: string;
   model: string;
-  segment_id: number;
+  segment: "economy" | "standard" | "luxury" | "suv";
   transmission: "automatic" | "manual";
-  fuel_type: "gasoline" | "diesel" | "electric";
+  fuel_type: "gasoline" | "diesel" | "electric" | "hybrid";
   seat: number;
 }) {
   return (
@@ -34,11 +34,7 @@ export function CarCard({
       <div className="my-4">
         <Image
           src={
-            segment_id === 1
-              ? "/eco.png"
-              : segment_id === 2
-                ? "/lux.png"
-                : "/suv.png"
+            segment === "economy" ? "/eco.png" : segment === "luxury" ? "/lux.png" : "/suv.png"
           }
           priority={true}
           alt="car"

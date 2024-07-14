@@ -1,9 +1,175 @@
 {
-  "id": "6a9e0f8d-2c86-48bf-9b2b-92314acfcf6a",
-  "prevId": "c9139d67-3963-4f86-a242-0617f066ec98",
+  "id": "7162a938-5d5b-4360-895c-e4fcc424740d",
+  "prevId": "2df93ae7-842b-4178-bace-735155dffaf5",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
+    "public.car_hotel_account": {
+      "name": "car_hotel_account",
+      "schema": "",
+      "columns": {
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "provider": {
+          "name": "provider",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "providerAccountId": {
+          "name": "providerAccountId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "refresh_token": {
+          "name": "refresh_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "access_token": {
+          "name": "access_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "token_type": {
+          "name": "token_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_token": {
+          "name": "id_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "session_state": {
+          "name": "session_state",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "car_hotel_account_userId_car_hotel_user_id_fk": {
+          "name": "car_hotel_account_userId_car_hotel_user_id_fk",
+          "tableFrom": "car_hotel_account",
+          "tableTo": "car_hotel_user",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "car_hotel_account_provider_providerAccountId_pk": {
+          "name": "car_hotel_account_provider_providerAccountId_pk",
+          "columns": [
+            "provider",
+            "providerAccountId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "public.car_hotel_car_rental": {
+      "name": "car_hotel_car_rental",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "vendor_id": {
+          "name": "vendor_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tax_no": {
+          "name": "tax_no",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "service_area[]": {
+          "name": "service_area[]",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "car_hotel_car_rental_vendor_id_car_hotel_vendors_id_fk": {
+          "name": "car_hotel_car_rental_vendor_id_car_hotel_vendors_id_fk",
+          "tableFrom": "car_hotel_car_rental",
+          "tableTo": "car_hotel_vendors",
+          "columnsFrom": [
+            "vendor_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.car_hotel_cars": {
       "name": "car_hotel_cars",
       "schema": "",
@@ -14,9 +180,15 @@
           "primaryKey": true,
           "notNull": true
         },
-        "segment_id": {
-          "name": "segment_id",
+        "car_rental_id": {
+          "name": "car_rental_id",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "segment": {
+          "name": "segment",
+          "type": "varchar(100)",
           "primaryKey": false,
           "notNull": true
         },
@@ -40,7 +212,25 @@
         },
         "license_plate": {
           "name": "license_plate",
-          "type": "varchar(10)",
+          "type": "varchar(30)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transmission": {
+          "name": "transmission",
+          "type": "varchar(15)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fuel_type": {
+          "name": "fuel_type",
+          "type": "varchar(15)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "seat_count": {
+          "name": "seat_count",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -49,6 +239,13 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar(15)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'unlisted'"
         },
         "created_at": {
           "name": "created_at",
@@ -89,17 +286,17 @@
         }
       },
       "foreignKeys": {
-        "car_hotel_cars_segment_id_car_hotel_segments_id_fk": {
-          "name": "car_hotel_cars_segment_id_car_hotel_segments_id_fk",
+        "car_hotel_cars_car_rental_id_car_hotel_car_rental_id_fk": {
+          "name": "car_hotel_cars_car_rental_id_car_hotel_car_rental_id_fk",
           "tableFrom": "car_hotel_cars",
-          "tableTo": "car_hotel_segments",
+          "tableTo": "car_hotel_car_rental",
           "columnsFrom": [
-            "segment_id"
+            "car_rental_id"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -114,156 +311,61 @@
         }
       }
     },
-    "public.car_hotel_customers": {
-      "name": "car_hotel_customers",
+    "public.car_hotel_user": {
+      "name": "car_hotel_user",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
         "name": {
           "name": "name",
-          "type": "varchar(100)",
+          "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "email": {
           "name": "email",
-          "type": "varchar(100)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "phone": {
-          "name": "phone",
+        "emailVerified": {
+          "name": "emailVerified",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "image": {
+          "name": "image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "password": {
+          "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role": {
+          "name": "role",
           "type": "varchar(15)",
           "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
           "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "default": "'customer'"
         }
       },
-      "indexes": {
-        "customers_email_idx": {
-          "name": "customers_email_idx",
-          "columns": [
-            "email"
-          ],
-          "isUnique": false
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "car_hotel_customers_email_unique": {
-          "name": "car_hotel_customers_email_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
-        }
-      }
-    },
-    "public.car_hotel_prices": {
-      "name": "car_hotel_prices",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "car_id": {
-          "name": "car_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "start_date": {
-          "name": "start_date",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "end_date": {
-          "name": "end_date",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "price_per_day": {
-          "name": "price_per_day",
-          "type": "numeric(10, 2)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "prices_car_idx": {
-          "name": "prices_car_idx",
-          "columns": [
-            "car_id"
-          ],
-          "isUnique": false
-        },
-        "prices_date_idx": {
-          "name": "prices_date_idx",
-          "columns": [
-            "start_date",
-            "end_date"
-          ],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {
-        "car_hotel_prices_car_id_car_hotel_cars_id_fk": {
-          "name": "car_hotel_prices_car_id_car_hotel_cars_id_fk",
-          "tableFrom": "car_hotel_prices",
-          "tableTo": "car_hotel_cars",
-          "columnsFrom": [
-            "car_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.car_hotel_reservations": {
-      "name": "car_hotel_reservations",
+    "public.car_hotel_vendors": {
+      "name": "car_hotel_vendors",
       "schema": "",
       "columns": {
         "id": {
@@ -272,125 +374,29 @@
           "primaryKey": true,
           "notNull": true
         },
-        "customer_id": {
-          "name": "customer_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "car_id": {
-          "name": "car_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "start_date": {
-          "name": "start_date",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "end_date": {
-          "name": "end_date",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "total_price": {
-          "name": "total_price",
-          "type": "numeric(10, 2)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "reservations_customer_idx": {
-          "name": "reservations_customer_idx",
-          "columns": [
-            "customer_id"
-          ],
-          "isUnique": false
-        },
-        "reservations_car_idx": {
-          "name": "reservations_car_idx",
-          "columns": [
-            "car_id"
-          ],
-          "isUnique": false
-        },
-        "reservations_date_idx": {
-          "name": "reservations_date_idx",
-          "columns": [
-            "start_date",
-            "end_date"
-          ],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {
-        "car_hotel_reservations_customer_id_car_hotel_customers_id_fk": {
-          "name": "car_hotel_reservations_customer_id_car_hotel_customers_id_fk",
-          "tableFrom": "car_hotel_reservations",
-          "tableTo": "car_hotel_customers",
-          "columnsFrom": [
-            "customer_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "car_hotel_reservations_car_id_car_hotel_cars_id_fk": {
-          "name": "car_hotel_reservations_car_id_car_hotel_cars_id_fk",
-          "tableFrom": "car_hotel_reservations",
-          "tableTo": "car_hotel_cars",
-          "columnsFrom": [
-            "car_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.car_hotel_segments": {
-      "name": "car_hotel_segments",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(100)",
+        "userId": {
+          "name": "userId",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "car_hotel_vendors_userId_car_hotel_user_id_fk": {
+          "name": "car_hotel_vendors_userId_car_hotel_user_id_fk",
+          "tableFrom": "car_hotel_vendors",
+          "tableTo": "car_hotel_user",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     }

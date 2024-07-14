@@ -21,14 +21,14 @@ export function CarList() {
   if (error) return <div className="px-4">Error loading cars</div>;
 
   return (
-    <div className="grid grid-cols-3 gap-4 px-4">
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 px-4">
       {cars?.map((car) => (
         <CarCard
           key={car.id}
           id={car.id}
           brand={car.brand}
           model={car.model}
-          segment_id={car.segment_id}
+          segment={car.segment}
           transmission={car.transmission}
           fuel_type={car.fuel_type}
           seat={car.seat_count}

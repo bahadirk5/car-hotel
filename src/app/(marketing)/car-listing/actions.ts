@@ -8,15 +8,17 @@ import { z } from "zod";
 // Filter params schema
 const filterParamsSchema = z.object({
   transmission: z.array(z.enum(["automatic", "manual"])).optional(),
-  fuel_type: z.array(z.enum(["gasoline", "diesel", "electric"])).optional(),
-  segment_id: z.array(z.coerce.number()).optional(),
+  fuel_type: z
+    .array(z.enum(["gasoline", "diesel", "electric", "hybrid"]))
+    .optional(),
+  segment: z.array(z.enum(["economy", "standard", "luxury", "suv"])).optional(),
   seat_count: z.array(z.coerce.number()).optional(),
 });
 
 type FiltersObject = {
   transmission?: ("automatic" | "manual")[];
-  fuel_type?: ("gasoline" | "diesel" | "electric")[];
-  segment_id?: number[];
+  fuel_type?: ("gasoline" | "diesel" | "electric" | "hybrid")[];
+  segment?: ("economy" | "standard" | "luxury" | "suv")[];
   seat_count?: number[];
   [key: string]: any; // Allows for additional properties
 };
@@ -45,8 +47,8 @@ export async function getFilteredCars(searchParams: URLSearchParams) {
   if (filters.data.fuel_type) {
     filterConditions.push(inArray(cars.fuel_type, filters.data.fuel_type));
   }
-  if (filters.data.segment_id) {
-    filterConditions.push(inArray(cars.segment_id, filters.data.segment_id));
+  if (filters.data.segment) {
+    filterConditions.push(inArray(cars.segment, filters.data.segment));
   }
   if (filters.data.seat_count) {
     filterConditions.push(inArray(cars.seat_count, filters.data.seat_count));

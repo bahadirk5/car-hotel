@@ -2,7 +2,7 @@ import { DotPattern } from "@/components/ui/dot-pattern";
 import { SearchForm } from "./components/search-form";
 import { cn } from "@/lib/utils";
 
-export default function HomePage() {
+export default async function HomePage() {
   return (
     <main className="-mt-28 flex min-h-screen flex-col items-center justify-center">
       <div className="container flex flex-col items-center justify-center gap-4">

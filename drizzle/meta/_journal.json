@@ -5,50 +5,15 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1719050404975,
-      "tag": "0000_nervous_pandemic",
+      "when": 1720781869151,
+      "tag": "0000_gifted_daimon_hellstrom",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "6",
-      "when": 1719056521842,
-      "tag": "0001_short_doctor_octopus",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1719141251235,
-      "tag": "0002_mushy_cassandra_nova",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1719916545965,
-      "tag": "0003_late_black_knight",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1720006254317,
-      "tag": "0004_zippy_medusa",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "6",
-      "when": 1720006294757,
-      "tag": "0005_lying_glorian",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "6",
-      "when": 1720006359161,
-      "tag": "0006_panoramic_weapon_omega",
+      "when": 1720784487064,
+      "tag": "0001_hesitant_sentinels",
       "breakpoints": true
     }
   ]

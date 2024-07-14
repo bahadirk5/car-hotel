@@ -5,6 +5,7 @@ export const FUEL_TYPES = {
     { id: "1", name: "gasoline" },
     { id: "2", name: "diesel" },
     { id: "3", name: "electric" },
+    { id: "4", name: "hybrid" },
   ],
 };
 
@@ -12,8 +13,8 @@ export const TRANSMISSION_TYPES = {
   id: "transmission",
   name: "Transmission Types",
   options: [
-    { id: "4", name: "automatic" },
-    { id: "5", name: "manual" },
+    { id: "5", name: "automatic" },
+    { id: "6", name: "manual" },
   ],
 };
 
@@ -21,10 +22,10 @@ export const SEAT_COUNTS = {
   id: "seat_count",
   name: "Seat Counts",
   options: [
-    { id: "6", name: "2" },
-    { id: "7", name: "4" },
-    { id: "8", name: "5" },
-    { id: "9", name: "7" },
+    { id: "7", name: "2" },
+    { id: "8", name: "3" },
+    { id: "9", name: "5" },
+    { id: "10", name: "7" },
   ],
 };
 
@@ -32,10 +33,10 @@ export const SEGMENTS = {
   id: "segments",
   name: "Segments",
   options: [
-    { id: "10", name: "Compact" },
-    { id: "11", name: "SUV" },
-    { id: "12", name: "Luxury" },
-    { id: "13", name: "Van" },
+    { id: "11", name: "Compact" },
+    { id: "12", name: "SUV" },
+    { id: "13", name: "Luxury" },
+    { id: "14", name: "Van" },
   ],
 };
 
