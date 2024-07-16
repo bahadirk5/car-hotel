@@ -1,1 +1,0 @@
-DROP TABLE "car_hotel_segments";

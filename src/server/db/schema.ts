@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   index,
   pgTableCreator,
@@ -62,14 +63,29 @@ export const vendors = createTable("vendors", {
     .references(() => users.id, { onDelete: "cascade" }),
 });
 
-export const car_rental = createTable("car_rental", {
+export const businesses = createTable("businesses", {
   id: serial("id").primaryKey(),
   vendor_id: integer("vendor_id")
     .references(() => vendors.id, { onDelete: "cascade" })
     .notNull(),
+  type: varchar("type", {
+    length: 100,
+    enum: ["car_rental", "hotel", "villa-apart", "transfer"],
+  }).notNull(),
+});
+
+export const car_rental = createTable("car_rental", {
+  id: serial("id").primaryKey(),
+  vendor_id: integer("vendor_id")
+    .references(() => vendors.id, { onDelete: "cascade" })
+    .notNull()
+    .unique(),
+  business_id: integer("business_id")
+    .references(() => businesses.id, { onDelete: "cascade" })
+    .notNull(),
   name: varchar("name", { length: 100 }).notNull(), // Rental company name
-  tax_no: varchar("tax_no", { length: 50 }).notNull(), // Tax number
-  service_area: text("service_area[]").notNull(), // Service areas as an array
+  tax_no: varchar("tax_no", { length: 50 }), // Tax number
+  service_area: text("service_area[]"), // Service areas as an array
   created_at: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(), // Timestamp for record creation
@@ -123,3 +139,18 @@ export const cars = createTable(
     modelIndex: index("cars_model_idx").on(table.model), // Unique index name
   }),
 );
+
+// Relationships between businesses and car_rental
+export const businessesRelations = relations(businesses, ({ one }) => ({
+  car_rental: one(car_rental, {
+    fields: [businesses.id],
+    references: [car_rental.business_id],
+  }),
+}));
+
+export const car_rentalRelations = relations(car_rental, ({ one }) => ({
+  business: one(businesses, {
+    fields: [car_rental.business_id],
+    references: [businesses.id],
+  }),
+}));

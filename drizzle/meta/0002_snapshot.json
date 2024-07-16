@@ -1,6 +1,6 @@
 {
-  "id": "c5d0c2d5-cd57-4bdf-bdfc-dfa9fc359475",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "4aa28ec6-992d-4717-b854-1aa7aa692ea2",
+  "prevId": "e1000e96-3923-4fe7-867c-1ae4fce1f2b5",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -118,8 +118,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "segment": {
-          "name": "segment",
+        "type": {
+          "name": "type",
           "type": "varchar(100)",
           "primaryKey": false,
           "notNull": true
@@ -152,6 +152,12 @@
           "name": "id",
           "type": "serial",
           "primaryKey": true,
+          "notNull": true
+        },
+        "vendor_id": {
+          "name": "vendor_id",
+          "type": "integer",
+          "primaryKey": false,
           "notNull": true
         },
         "business_id": {
@@ -195,6 +201,19 @@
       },
       "indexes": {},
       "foreignKeys": {
+        "car_hotel_car_rental_vendor_id_car_hotel_vendors_id_fk": {
+          "name": "car_hotel_car_rental_vendor_id_car_hotel_vendors_id_fk",
+          "tableFrom": "car_hotel_car_rental",
+          "tableTo": "car_hotel_vendors",
+          "columnsFrom": [
+            "vendor_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
         "car_hotel_car_rental_business_id_car_hotel_businesses_id_fk": {
           "name": "car_hotel_car_rental_business_id_car_hotel_businesses_id_fk",
           "tableFrom": "car_hotel_car_rental",
@@ -210,7 +229,15 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "car_hotel_car_rental_vendor_id_unique": {
+          "name": "car_hotel_car_rental_vendor_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "vendor_id"
+          ]
+        }
+      }
     },
     "public.car_hotel_cars": {
       "name": "car_hotel_cars",

@@ -39,7 +39,7 @@ export async function upsertCar(values: z.infer<typeof carFormSchema>) {
     await db
       .insert(cars)
       .values({
-        vendor_id: vendored_id,
+        vendor_id: vendor_id,
         segment: values.segment,
         brand: values.brand,
         model: values.model,
