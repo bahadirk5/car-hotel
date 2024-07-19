@@ -61,10 +61,7 @@ export async function createBusiness(data: businessCreateValues) {
           where: eq(car_rental.vendor_id, vendor.id),
         });
 
-        console.log("Existing Car Rental:", existingCarRental);
-
         if (existingCarRental) {
-          console.log("Vendor already has a car rental business");
           throw new Error("Vendor already has a car rental business");
         }
       }

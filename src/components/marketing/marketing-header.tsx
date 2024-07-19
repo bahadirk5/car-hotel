@@ -49,7 +49,7 @@ export async function MarketingHeader() {
                     } catch (error) {
                       console.error("Error inserting vendor:", error);
                     }
-                    redirect("/vendor-dashboard/car-rental/create");
+                    redirect("/vendor-dashboard");
                   }}
                 >
                   <Button type="submit" variant="secondary">

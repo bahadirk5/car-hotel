@@ -20,6 +20,8 @@ export function CarList() {
   if (isLoading) return <div className="px-4">Loading...</div>;
   if (error) return <div className="px-4">Error loading cars</div>;
 
+  console.log(cars)
+
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 px-4">
       {cars?.map((car) => (
@@ -32,6 +34,7 @@ export function CarList() {
           transmission={car.transmission}
           fuel_type={car.fuel_type}
           seat={car.seat_count}
+          car_rental_name={car.car_rental_name}
         />
       ))}
     </div>

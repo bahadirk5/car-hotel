@@ -10,6 +10,7 @@ export function CarCard({
   transmission,
   fuel_type,
   seat,
+  car_rental_name,
 }: {
   id: number;
   brand: string;
@@ -18,14 +19,18 @@ export function CarCard({
   transmission: "automatic" | "manual";
   fuel_type: "gasoline" | "diesel" | "electric" | "hybrid";
   seat: number;
+  car_rental_name: string | null;
 }) {
   return (
     <div className="rounded border p-4" key={id}>
-      <div className="flex items-end gap-1">
-        <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-          {brand}
-        </h3>
-        <p className="text-sm text-muted-foreground">{model}</p>
+      <div className="flex gap-1 justify-between items-start">
+        <div className="flex items-end gap-1">
+          <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+            {brand}
+          </h3>
+          <p className="text-sm text-muted-foreground mb-[2px]">{model}</p>
+        </div>
+        <div>{car_rental_name}</div>
       </div>
       <Badge variant="outline" className="my-1 text-muted-foreground">
         Or similar car
@@ -34,7 +39,11 @@ export function CarCard({
       <div className="my-4">
         <Image
           src={
-            segment === "economy" ? "/eco.png" : segment === "luxury" ? "/lux.png" : "/suv.png"
+            segment === "economy"
+              ? "/eco.png"
+              : segment === "luxury"
+                ? "/lux.png"
+                : "/suv.png"
           }
           priority={true}
           alt="car"

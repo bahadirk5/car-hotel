@@ -86,7 +86,7 @@ export function CarForm({
     },
     onError: (error) => {
       console.error("Error creating car:", error);
-      if (error.message === "License plate already exists") {
+      if (error.message === "License plate already exists for another car") {
         form.setError("license_plate", {
           type: "manual",
           message: "This license plate is already registered.",
@@ -106,7 +106,7 @@ export function CarForm({
               <div className="mx-auto grid max-w-5xl flex-1 auto-rows-max gap-4">
                 <div className="sticky top-0 z-20 flex items-center gap-4 py-2 backdrop-blur">
                   <Link
-                    href="/vendor-dashboard/car-list"
+                    href="/vendor-dashboard/car/list"
                     className={cn(
                       buttonVariants({ variant: "outline", size: "icon" }),
                       "h-7 w-7",

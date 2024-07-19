@@ -14,7 +14,7 @@ interface CarRental {
   vendor_id: number;
   business_id: number;
   tax_no: string | null;
-  service_area: string | null;
+  service_area: string[];
   created_at: Date;
   updated_at: Date;
 }

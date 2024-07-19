@@ -35,16 +35,16 @@ import {
 import { DataTableColumnHeader } from "./data-table-column-header";
 import Link from "next/link";
 import { useMutation } from "@tanstack/react-query";
-import { deleteCar, setStatus } from "../actions";
 import { toast } from "sonner";
 import { carStatuses, CarStatus } from "../types";
+import { deleteCar, setStatus } from "../../actions";
 
 export type CarType = {
   id: number;
   brand: string;
   model: string;
   license_plate: string;
-  segment_name: string | null;
+  segment: string;
   created_at: Date;
   updated_at: Date;
   status: CarStatus;
@@ -86,7 +86,7 @@ export const columns: ColumnDef<CarType>[] = [
     header: "License Plate",
   },
   {
-    accessorKey: "segment_name",
+    accessorKey: "segment",
     header: "Segment",
   },
   {
@@ -187,8 +187,7 @@ export const columns: ColumnDef<CarType>[] = [
               </DropdownMenuSubContent>
             </DropdownMenuSub>
             <DropdownMenuSeparator />
-            <DropdownMenuSeparator />
-            <Link href={`/car/edit/${car.id}`}>
+            <Link href={`/vendor-dashboard/car/edit/${car.id}`}>
               <DropdownMenuItem>Edit</DropdownMenuItem>
             </Link>
             <AlertDialog>

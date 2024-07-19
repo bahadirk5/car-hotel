@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/server/db";
-import { cars } from "@/server/db/schema";
+import { cars, car_rental } from "@/server/db/schema";
 import { eq, and, inArray } from "drizzle-orm";
 import { z } from "zod";
 
@@ -58,8 +58,19 @@ export async function getFilteredCars(searchParams: URLSearchParams) {
 
   try {
     const filteredCars = await db
-      .select()
+      .select({
+        id: cars.id,
+        brand: cars.brand,
+        model: cars.model,
+        license_plate: cars.license_plate,
+        segment: cars.segment,
+        transmission: cars.transmission,
+        fuel_type: cars.fuel_type,
+        seat_count: cars.seat_count,
+        car_rental_name: car_rental.name,
+      })
       .from(cars)
+      .leftJoin(car_rental, eq(cars.car_rental_id, car_rental.id))
       .where(and(...filterConditions));
 
     return filteredCars;

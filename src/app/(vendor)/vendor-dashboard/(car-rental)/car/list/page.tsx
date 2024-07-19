@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { DataTable } from "./components/data-table";
 import { columns } from "./components/columns";
-import { getCars } from "./actions";
+import { getCars } from "../actions";
 
 export default async function CarListPage() {
   const cars = await getCars();
@@ -21,7 +21,7 @@ export default async function CarListPage() {
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-end">
         <Link
-          href="/car/create"
+          href="/vendor-dashboard/car/create"
           className={cn(buttonVariants({ size: "sm" }), "h-8 gap-1")}
         >
           <PlusCircle className="h-3.5 w-3.5" />
