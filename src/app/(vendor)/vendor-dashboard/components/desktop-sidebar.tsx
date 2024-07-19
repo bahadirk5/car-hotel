@@ -1,16 +1,12 @@
-import Link from "next/link";
-import { Home, LineChart, Package, ShoppingCart, Users } from "lucide-react";
+"use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Car, Home, LineChart, Settings } from "lucide-react";
 import { BusinessSwitcher } from "./business-switcher";
+import { NavItem } from "./nav-item";
+import { Separator } from "@/components/ui/separator";
+import { useEffect, useState } from "react";
+import { VendorAccountNav } from "./vendor-account-nav";
+import { User } from "next-auth";
 
 interface CarRental {
   id: number;
@@ -26,7 +22,7 @@ interface CarRental {
 interface Business {
   id: number;
   vendor_id: number;
-  type: "car_rental" | "hotel" | "villa-apart" | "transfer";
+  type: "car_rental" | "hotel" | "villa_apart" | "transfer";
   car_rental?: CarRental | null;
 }
 
@@ -38,9 +34,47 @@ interface Vendor {
 interface DesktopSidebarProps {
   vendor: Vendor;
   businesses: Business[];
+  user: {
+    role: "vendor" | "customer" | "admin";
+  } & User;
 }
 
-export function DesktopSidebar({ vendor, businesses }: DesktopSidebarProps) {
+const CarRentalNavs = [
+  {
+    label: "Settings",
+    href: "/vendor-dashboard/car/settings",
+    icon: Settings,
+  },
+  {
+    label: "Car List",
+    href: "/vendor-dashboard/car/list",
+    icon: Car,
+  },
+];
+
+export function DesktopSidebar({
+  user,
+  vendor,
+  businesses,
+}: DesktopSidebarProps) {
+  const [businessType, setBusinessType] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedBusinessType = localStorage.getItem("businessType");
+    setBusinessType(storedBusinessType);
+
+    const handleStorageChange = () => {
+      const updatedBusinessType = localStorage.getItem("businessType");
+      setBusinessType(updatedBusinessType);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   return (
     <div className="fixed left-0 top-0 z-40 hidden h-screen w-64 border-r bg-background md:block">
       <div className="flex h-full max-h-screen flex-col gap-2">
@@ -49,61 +83,32 @@ export function DesktopSidebar({ vendor, businesses }: DesktopSidebarProps) {
         </div>
         <div className="flex-1">
           <nav className="grid items-start text-sm font-medium">
-            <Link
-              href="#"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-primary transition-all hover:text-primary"
-            >
-              <Home className="h-4 w-4" />
-              Dashboard
-            </Link>
-            <Link
-              href="#"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-primary transition-all hover:text-primary"
-            >
-              <ShoppingCart className="h-4 w-4" />
-              Orders
-              <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                6
-              </Badge>
-            </Link>
-            <Link
-              href="#"
-              className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary"
-            >
-              <Package className="h-4 w-4" />
-              Products{" "}
-            </Link>
-            <Link
-              href="#"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-primary transition-all hover:text-primary"
-            >
-              <Users className="h-4 w-4" />
-              Customers
-            </Link>
-            <Link
-              href="#"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-primary transition-all hover:text-primary"
-            >
-              <LineChart className="h-4 w-4" />
-              Analytics
-            </Link>
+            <h4 className="px-3 py-2 text-sm tracking-tight text-muted-foreground">
+              General
+            </h4>
+            <NavItem href="/vendor-dashboard" label="Dashboard" icon={Home} />
+            <NavItem href="#" label="Analytics" icon={LineChart} />
+            <Separator className="my-4" />
+            {businessType === "car_rental" ? (
+              <>
+                <h4 className="px-3 py-2 text-sm tracking-tight text-muted-foreground">
+                  Car Rental
+                </h4>
+                {CarRentalNavs.map((nav) => (
+                  <NavItem
+                    key={nav.href}
+                    href={nav.href}
+                    label={nav.label}
+                    icon={nav.icon}
+                  />
+                ))}
+              </>
+            ) : null}
           </nav>
         </div>
-        <div className="mt-auto p-4">
-          <Card x-chunk="dashboard-02-chunk-0">
-            <CardHeader className="p-2 pt-0 md:p-4">
-              <CardTitle>Upgrade to Pro</CardTitle>
-              <CardDescription>
-                Unlock all features and get unlimited access to our support
-                team.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-2 pt-0 md:p-4 md:pt-0">
-              <Button size="sm" className="w-full">
-                Upgrade
-              </Button>
-            </CardContent>
-          </Card>
+        <div className="mt-auto h-16">
+          <Separator className="" />
+          <VendorAccountNav vendor={vendor} user={user} />
         </div>
       </div>
     </div>

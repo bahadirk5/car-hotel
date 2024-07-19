@@ -18,7 +18,7 @@ export default async function CarListPage() {
   const cars = await getCars();
 
   return (
-    <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0">
+    <div className="flex flex-col gap-2">
       <div className="flex items-center justify-end">
         <Link
           href="/car/create"
@@ -41,6 +41,6 @@ export default async function CarListPage() {
           <DataTable columns={columns} data={cars} />
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

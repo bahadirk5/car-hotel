@@ -196,7 +196,7 @@ export function BusinessSwitcher({
                 <span className="text-base">
                   {selectedBusiness.car_rental?.name ?? "hotel"}
                 </span>
-                <CaretSortIcon className="ml-auto h-6 w-6 shrink-0 opacity-50" />
+                <CaretSortIcon className="ml-auto h-5 w-5 shrink-0 opacity-50" />
               </>
             ) : (
               "Select a business"
@@ -231,7 +231,9 @@ export function BusinessSwitcher({
                             business.car_rental?.name.substring(0, 2)}
                         </AvatarFallback>
                       </Avatar>
-                      {business.car_rental?.name}
+                      {business.car_rental?.name
+                        ? business.car_rental?.name
+                        : "Others"}
                       <CheckIcon
                         className={cn(
                           "ml-auto h-4 w-4",

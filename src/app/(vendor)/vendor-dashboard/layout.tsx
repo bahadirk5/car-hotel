@@ -18,12 +18,12 @@ export default async function VendorLayout({ children }: LayoutProps) {
   if (!vendor) {
     return notFound();
   }
-
+  console.log(vendor);
   const businesses = (await getBusinessByVendorID(vendor.id)) || [];
 
   return (
     <div className="grid min-h-screen w-full bg-muted/40">
-      <DesktopSidebar vendor={vendor} businesses={businesses} />
+      <DesktopSidebar user={session.user} vendor={vendor} businesses={businesses} />
       <div className="flex flex-col">
         <MobileMenu />
         <main className="flex flex-1 flex-col gap-4 p-4 sm:ml-64 lg:gap-6 lg:p-6">

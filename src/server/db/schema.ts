@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   index,
   pgTableCreator,
@@ -70,7 +70,7 @@ export const businesses = createTable("businesses", {
     .notNull(),
   type: varchar("type", {
     length: 100,
-    enum: ["car_rental", "hotel", "villa-apart", "transfer"],
+    enum: ["car_rental", "hotel", "villa_apart", "transfer"],
   }).notNull(),
 });
 
@@ -85,7 +85,10 @@ export const car_rental = createTable("car_rental", {
     .notNull(),
   name: varchar("name", { length: 100 }).notNull(), // Rental company name
   tax_no: varchar("tax_no", { length: 50 }), // Tax number
-  service_area: text("service_area[]"), // Service areas as an array
+  service_area: text("service_area")
+    .array()
+    .notNull()
+    .default(sql`ARRAY[]::text[]`), // Service areas as an array
   created_at: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(), // Timestamp for record creation

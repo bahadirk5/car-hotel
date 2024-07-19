@@ -41,7 +41,7 @@ export function FormBuild({
   inputAttrs: {
     name: string;
     type: string;
-    defaultValue: string | string[];
+    defaultValue: string | string[] | null | undefined;
     placeholder?: string;
     maxLength?: number;
   };

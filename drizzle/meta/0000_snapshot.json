@@ -1,5 +1,5 @@
 {
-  "id": "c5d0c2d5-cd57-4bdf-bdfc-dfa9fc359475",
+  "id": "a83c9f02-7838-4dc1-a3c7-58183a03d176",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "6",
   "dialect": "postgresql",
@@ -118,8 +118,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "segment": {
-          "name": "segment",
+        "type": {
+          "name": "type",
           "type": "varchar(100)",
           "primaryKey": false,
           "notNull": true
@@ -154,6 +154,12 @@
           "primaryKey": true,
           "notNull": true
         },
+        "vendor_id": {
+          "name": "vendor_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
         "business_id": {
           "name": "business_id",
           "type": "integer",
@@ -170,13 +176,14 @@
           "name": "tax_no",
           "type": "varchar(50)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
-        "service_area[]": {
-          "name": "service_area[]",
-          "type": "text",
+        "service_area": {
+          "name": "service_area",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
         },
         "created_at": {
           "name": "created_at",
@@ -195,6 +202,19 @@
       },
       "indexes": {},
       "foreignKeys": {
+        "car_hotel_car_rental_vendor_id_car_hotel_vendors_id_fk": {
+          "name": "car_hotel_car_rental_vendor_id_car_hotel_vendors_id_fk",
+          "tableFrom": "car_hotel_car_rental",
+          "tableTo": "car_hotel_vendors",
+          "columnsFrom": [
+            "vendor_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
         "car_hotel_car_rental_business_id_car_hotel_businesses_id_fk": {
           "name": "car_hotel_car_rental_business_id_car_hotel_businesses_id_fk",
           "tableFrom": "car_hotel_car_rental",
@@ -210,7 +230,15 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "car_hotel_car_rental_vendor_id_unique": {
+          "name": "car_hotel_car_rental_vendor_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "vendor_id"
+          ]
+        }
+      }
     },
     "public.car_hotel_cars": {
       "name": "car_hotel_cars",

@@ -1,12 +1,13 @@
 import Link from "next/link";
 
-import { updateCarRental } from "./actions";
+import { getCarRental, updateCarRental } from "./actions";
 import { FormBuild } from "@/components/form";
 
+export default async function CarRentalPage() {
+  const carRental = await getCarRental();
 
-export default function CarRentalPage() {
   return (
-    <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
+    <div className="flex flex-col gap-4 md:gap-8">
       <div className="mx-auto grid w-full max-w-6xl gap-2">
         <h1 className="text-3xl font-semibold">Settings</h1>
       </div>
@@ -29,7 +30,7 @@ export default function CarRentalPage() {
             inputAttrs={{
               name: "name",
               type: "text",
-              defaultValue: "",
+              defaultValue: carRental?.name,
               maxLength: 32,
             }}
             handleSubmit={updateCarRental}
@@ -41,7 +42,7 @@ export default function CarRentalPage() {
             inputAttrs={{
               name: "tax_no",
               type: "text",
-              defaultValue: "",
+              defaultValue: carRental?.tax_no,
               maxLength: 32,
             }}
             handleSubmit={updateCarRental}
@@ -53,13 +54,13 @@ export default function CarRentalPage() {
             inputAttrs={{
               name: "service_area",
               type: "textArray",
-              defaultValue: [""],
+              defaultValue: carRental?.service_area,
               maxLength: 32,
             }}
             handleSubmit={updateCarRental}
           />
         </div>
       </div>
-    </main>
+    </div>
   );
 }

@@ -16,17 +16,19 @@ CREATE TABLE IF NOT EXISTS "car_hotel_account" (
 CREATE TABLE IF NOT EXISTS "car_hotel_businesses" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"vendor_id" integer NOT NULL,
-	"segment" varchar(100) NOT NULL
+	"type" varchar(100) NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "car_hotel_car_rental" (
 	"id" serial PRIMARY KEY NOT NULL,
+	"vendor_id" integer NOT NULL,
 	"business_id" integer NOT NULL,
 	"name" varchar(100) NOT NULL,
-	"tax_no" varchar(50) NOT NULL,
-	"service_area[]" text NOT NULL,
+	"tax_no" varchar(50),
+	"service_area" text[] DEFAULT ARRAY[]::text[] NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "car_hotel_car_rental_vendor_id_unique" UNIQUE("vendor_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "car_hotel_cars" (
@@ -70,6 +72,12 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "car_hotel_businesses" ADD CONSTRAINT "car_hotel_businesses_vendor_id_car_hotel_vendors_id_fk" FOREIGN KEY ("vendor_id") REFERENCES "public"."car_hotel_vendors"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "car_hotel_car_rental" ADD CONSTRAINT "car_hotel_car_rental_vendor_id_car_hotel_vendors_id_fk" FOREIGN KEY ("vendor_id") REFERENCES "public"."car_hotel_vendors"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

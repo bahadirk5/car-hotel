@@ -1,1 +1,0 @@
-ALTER TABLE "car_hotel_businesses" RENAME COLUMN "segment" TO "type";

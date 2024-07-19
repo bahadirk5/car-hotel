@@ -1,1 +1,0 @@
-ALTER TABLE "car_hotel_car_rental" ALTER COLUMN "name" SET NOT NULL;
