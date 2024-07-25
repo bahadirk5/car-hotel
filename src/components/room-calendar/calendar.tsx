@@ -64,8 +64,8 @@ export function CustomCalendar() {
   };
 
   return (
-    <div className="w-full">
-      <div className="flex items-center justify-between px-8 py-4">
+    <div className="mx-auto w-full max-w-screen-xl">
+      <div className="mb-4 flex items-center justify-end">
         <div className="flex gap-1">
           <Button variant="outline" size="icon" onClick={handlePreviousMonth}>
             &lt;
@@ -77,23 +77,20 @@ export function CustomCalendar() {
             &gt;
           </Button>
         </div>
-        <div className="scroll-m-20 text-2xl font-semibold tracking-tight">
-          {currentDate.format("MMMM YYYY")}
-        </div>
       </div>
-      <div className="relative flex w-full">
+      <div className="relative flex w-full rounded-lg border-[2px]">
         <div
           ref={sidebarRef}
-          className="sticky left-0 top-0 z-10 min-w-[250px] overflow-y-auto bg-background shadow"
+          className="sticky left-0 top-0 z-10 min-w-[250px] overflow-y-auto bg-background"
         >
-          <div className="flex h-[50px] items-center rounded-t bg-slate-200">
+          <div className="flex h-[50px] items-center bg-secondary">
             <h2 className="px-4 text-2xl font-semibold tracking-tight">
-              Room types
+              {currentDate.format("MMMM YYYY")}
             </h2>
           </div>
           {rooms.map((roomType) => (
             <div key={roomType.id}>
-              <div className="flex h-[50px] items-center rounded bg-muted">
+              <div className="flex h-[50px] items-center rounded bg-muted/40">
                 <p className="px-4 font-semibold tracking-tight">
                   {roomType.name}
                 </p>
@@ -108,8 +105,8 @@ export function CustomCalendar() {
                     className={cn(
                       "rounded-md px-2 py-1 text-xs font-medium",
                       room.status === "Clean"
-                        ? " bg-green-100 text-green-600"
-                        : "bg-red-100 text-red-400",
+                        ? " bg-primary text-primary-foreground"
+                        : "bg-muted text-muted-foreground",
                     )}
                   >
                     {room.status}

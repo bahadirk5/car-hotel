@@ -8,7 +8,7 @@ export type Price = {
 export type Room = {
   id: number;
   name: string;
-  status: "Clean" | "Needs cleaning";
+  status: "Clean" | "Needs Cleaning";
 };
 
 export type RoomType = {
@@ -91,8 +91,8 @@ export const rooms: RoomType[] = [
     id: 1,
     name: "Single Room",
     rooms: [
-      { id: 1, name: "Room 101", status: "Needs cleaning" },
-      { id: 2, name: "Room 102", status: "Needs cleaning" },
+      { id: 1, name: "Room 101", status: "Needs Cleaning" },
+      { id: 2, name: "Room 102", status: "Needs Cleaning" },
       { id: 3, name: "Room 103", status: "Clean" },
       { id: 4, name: "Room 104", status: "Clean" },
     ],
@@ -107,7 +107,7 @@ export const rooms: RoomType[] = [
     name: "Suite",
     rooms: [
       { id: 5, name: "Room 105", status: "Clean" },
-      { id: 6, name: "Room 106", status: "Needs cleaning" },
+      { id: 6, name: "Room 106", status: "Needs Cleaning" },
       { id: 7, name: "Room 107", status: "Clean" },
       { id: 8, name: "Room 108", status: "Clean" },
     ],
@@ -123,7 +123,7 @@ export const rooms: RoomType[] = [
     rooms: [
       { id: 9, name: "Room 109", status: "Clean" },
       { id: 10, name: "Room 110", status: "Clean" },
-      { id: 11, name: "Room 111", status: "Needs cleaning" },
+      { id: 11, name: "Room 111", status: "Needs Cleaning" },
       { id: 12, name: "Room 112", status: "Clean" },
     ],
     prices: [

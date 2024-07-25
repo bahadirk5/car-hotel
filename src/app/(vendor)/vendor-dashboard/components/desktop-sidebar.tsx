@@ -4,9 +4,9 @@ import { Car, Home, LineChart, Settings } from "lucide-react";
 import { BusinessSwitcher } from "./business-switcher";
 import { NavItem } from "./nav-item";
 import { Separator } from "@/components/ui/separator";
-import { useEffect, useState } from "react";
 import { VendorAccountNav } from "./vendor-account-nav";
 import { User } from "next-auth";
+import { useBusinessStore } from "@/hooks/store";
 
 interface CarRental {
   id: number;
@@ -57,28 +57,12 @@ export function DesktopSidebar({
   vendor,
   businesses,
 }: DesktopSidebarProps) {
-  const [businessType, setBusinessType] = useState<string | null>(null);
-
-  useEffect(() => {
-    const storedBusinessType = localStorage.getItem("businessType");
-    setBusinessType(storedBusinessType);
-
-    const handleStorageChange = () => {
-      const updatedBusinessType = localStorage.getItem("businessType");
-      setBusinessType(updatedBusinessType);
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, []);
+  const { selected_business } = useBusinessStore();
 
   return (
     <div className="fixed left-0 top-0 z-40 hidden h-screen w-64 border-r bg-background md:block">
       <div className="flex h-full max-h-screen flex-col gap-2">
-        <div className="flex h-14 items-center border-b">
+        <div className="flex h-14 items-center border-b px-2">
           <BusinessSwitcher businesses={businesses} />
         </div>
         <div className="flex-1">
@@ -89,7 +73,7 @@ export function DesktopSidebar({
             <NavItem href="/vendor-dashboard" label="Dashboard" icon={Home} />
             <NavItem href="#" label="Analytics" icon={LineChart} />
             <Separator className="my-4" />
-            {businessType === "car_rental" ? (
+            {selected_business?.type === "car_rental" ? (
               <>
                 <h4 className="px-3 py-2 text-sm tracking-tight text-muted-foreground">
                   Car Rental

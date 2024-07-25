@@ -151,7 +151,7 @@ export function FormBuild({
               </>
             ) : null}
           </CardContent>
-          <CardFooter className="flex items-center justify-between border-t px-6 py-4">
+          <CardFooter className="flex items-center bg-secondary justify-between border-t px-6 py-4">
             <FormDescription>{helpText}</FormDescription>
             <div className="mt-3">
               <Button type="submit">

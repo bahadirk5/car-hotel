@@ -1,11 +1,17 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   CaretSortIcon,
   CheckIcon,
   PlusCircledIcon,
 } from "@radix-ui/react-icons";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { Car, CarFront, Hotel, Loader2Icon } from "lucide-react";
 
 import {
   Form,
@@ -16,10 +22,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-
-import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -53,11 +55,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { z } from "zod";
-import { useMutation } from "@tanstack/react-query";
+
 import { createBusiness } from "../actions";
-import { toast } from "sonner";
-import { Loader2Icon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useBusinessStore } from "@/hooks/store";
 
 interface Business {
   id: number;
@@ -94,54 +95,14 @@ export function BusinessSwitcher({
   businesses,
   className,
 }: BusinessSwitcherProps) {
-  const [selectedBusiness, setSelectedBusiness] = useState<Business | null>(
-    null,
-  );
-  const [businessType, setBusinessType] = useState<
-    "car_rental" | "hotel" | "villa_apart" | "transfer" | null
-  >(null);
+  const { selected_business, updateSelectedBusiness } = useBusinessStore();
+  const [open, setOpen] = useState(false);
+  const [showNewBusinessDialog, setShowNewBusinessDialog] = useState(false);
 
   const form = useForm<businessCreateValues>({
     resolver: zodResolver(businessCreateSchema),
     mode: "onChange",
   });
-
-  const [open, setOpen] = useState(false);
-  const [showNewBusinessDialog, setShowNewBusinessDialog] = useState(false);
-
-  // Load state from local storage on mount
-  useEffect(() => {
-    const savedBusiness = localStorage.getItem("selectedBusiness");
-    const savedBusinessType = localStorage.getItem("businessType");
-
-    if (savedBusiness && savedBusinessType) {
-      setSelectedBusiness(JSON.parse(savedBusiness));
-      setBusinessType(
-        savedBusinessType as
-          | "car_rental"
-          | "hotel"
-          | "villa_apart"
-          | "transfer",
-      );
-    } else if (businesses.length > 0) {
-      const firstBusiness = businesses[0];
-      if (firstBusiness) {
-        setSelectedBusiness(firstBusiness);
-        setBusinessType(firstBusiness.type);
-      }
-    }
-  }, [businesses]);
-
-  // Save state to local storage on change
-  useEffect(() => {
-    if (selectedBusiness && businessType) {
-      localStorage.setItem(
-        "selectedBusiness",
-        JSON.stringify(selectedBusiness),
-      );
-      localStorage.setItem("businessType", businessType);
-    }
-  }, [selectedBusiness, businessType]);
 
   function onSubmit(data: businessCreateValues) {
     create_business(data);
@@ -178,23 +139,20 @@ export function BusinessSwitcher({
             role="combobox"
             aria-expanded={open}
             aria-label="Select a business"
-            className={cn(
-              "h-full w-full justify-between border-none",
-              className,
-            )}
+            className={cn("w-full", className)}
           >
-            {selectedBusiness ? (
+            {selected_business ? (
               <>
-                <Avatar className="mr-2 h-5 w-5">
-                  <AvatarImage
-                    src={`https://avatar.vercel.sh/${selectedBusiness.id}.png`}
-                    alt={selectedBusiness.type}
-                    className="grayscale"
-                  />
-                  <AvatarFallback>SC</AvatarFallback>
+                <Avatar className="mr-2 flex h-6 w-6 items-center justify-center rounded bg-black">
+                  {selected_business.type === "car_rental" ||
+                  selected_business.type === "transfer" ? (
+                    <CarFront className="h-4 w-4 text-white" />
+                  ) : (
+                    <Hotel className="h-4 w-4 text-white" />
+                  )}
                 </Avatar>
                 <span className="text-base">
-                  {selectedBusiness.car_rental?.name ?? "hotel"}
+                  {selected_business.car_rental?.name ?? selected_business.type}
                 </span>
                 <CaretSortIcon className="ml-auto h-5 w-5 shrink-0 opacity-50" />
               </>
@@ -214,30 +172,26 @@ export function BusinessSwitcher({
                     <CommandItem
                       key={business.id}
                       onSelect={() => {
-                        setSelectedBusiness(business);
-                        setBusinessType(business.type);
+                        updateSelectedBusiness(business);
                         setOpen(false);
                       }}
                       className="text-sm"
                     >
-                      <Avatar className="mr-2 h-5 w-5">
-                        <AvatarImage
-                          src={`https://avatar.vercel.sh/${business.id}.png`}
-                          alt={business.type}
-                          className="grayscale"
-                        />
-                        <AvatarFallback>
-                          {business.type === "car_rental" ??
-                            business.car_rental?.name.substring(0, 2)}
-                        </AvatarFallback>
+                      <Avatar className="mr-2 flex h-5 w-5 items-center justify-center rounded bg-black">
+                        {business.type === "car_rental" ||
+                        business.type === "transfer" ? (
+                          <CarFront className="h-4 w-4 text-white" />
+                        ) : (
+                          <Hotel className="h-4 w-4 text-white" />
+                        )}
                       </Avatar>
                       {business.car_rental?.name
-                        ? business.car_rental?.name
-                        : "Others"}
+                        ? business.car_rental.name
+                        : business.type}
                       <CheckIcon
                         className={cn(
                           "ml-auto h-4 w-4",
-                          selectedBusiness?.id === business.id
+                          selected_business?.id === business.id
                             ? "opacity-100"
                             : "opacity-0",
                         )}
