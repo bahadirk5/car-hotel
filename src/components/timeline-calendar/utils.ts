@@ -1,5 +1,21 @@
-import { rooms, RoomType } from "./data";
+import { units } from "./data";
 import dayjs, { Dayjs } from "dayjs";
+
+export type UnitType = {
+  id: number;
+  name: string;
+  units: {
+    id: number;
+    name: string;
+    status: string;
+  }[];
+  prices: {
+    id: number;
+    start: string;
+    end: string;
+    price: number;
+  }[];
+};
 
 export const cellWidth = 100; // Geniş hücre genişliği
 
@@ -51,11 +67,11 @@ export function drawPricesAndRooms(
   daysCount: number,
 ) {
   let currentY = 50; // Header yüksekliğini 50px olarak kabul ediyoruz
-  rooms.forEach((roomType: RoomType) => {
+  units.forEach((unitType: UnitType) => {
     currentY += 50; // Kategori satırı yüksekliği
 
     // Fiyat çizimi
-    roomType.prices.forEach((price) => {
+    unitType.prices.forEach((price) => {
       const startDate = dayjs(price.start).startOf("day");
       const endDate = dayjs(price.end).endOf("day");
       for (
@@ -66,8 +82,8 @@ export function drawPricesAndRooms(
         const diff = date.diff(currentDate, "day");
         if (diff >= 0 && diff < daysCount) {
           const x = diff * cellWidth;
-          ctx.fillStyle = "rgb(255, 255, 255)"; // Beyaz arka plan
-          ctx.fillRect(x, currentY - 40, cellWidth, 40); // 40px yükseklik (daha küçük)
+          ctx.fillStyle = "rgba(241, 245, 249, 0.4)"; // Beyaz arka plan
+          ctx.fillRect(x, currentY - 50, cellWidth, 50); // 40px yükseklik (daha küçük)
           ctx.fillStyle = "rgb(100, 116, 139)"; // Siyah metin
           ctx.fillText(
             `$${price.price}`,
@@ -79,7 +95,7 @@ export function drawPricesAndRooms(
     });
 
     // Rezervasyonlar
-    roomType.rooms.forEach(() => {
+    unitType.units.forEach(() => {
       ctx.moveTo(0, currentY);
       ctx.lineTo(ctx.canvas.width, currentY);
       ctx.strokeStyle = "rgb(200, 200, 200)"; // Gri çizgiler

@@ -1,7 +1,7 @@
-import { CustomCalendar } from "@/components/room-calendar/calendar";
+import { TimelineCalendar } from "@/components/timeline-calendar/calendar";
 
 export default function CalendarPage() {
   return (
-    <CustomCalendar />
+    <TimelineCalendar />
   );
 }

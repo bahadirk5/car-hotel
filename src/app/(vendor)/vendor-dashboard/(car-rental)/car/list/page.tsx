@@ -10,9 +10,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { DataTable } from "./components/data-table";
+import { DataTable } from "@/app/(vendor)/vendor-dashboard/(car-rental)/car/list/components/data-table";
 import { columns } from "./components/columns";
 import { getCars } from "../actions";
+import { DataTableToolbar } from "./components/data-table-toolbar";
 
 export default async function CarListPage() {
   const cars = await getCars();

@@ -2,13 +2,13 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
-import { bookings, rooms } from "./data";
+import { reservations, units } from "./data";
 import BookingComponent from "./booking-component";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { cellWidth, drawGrid, drawHeaders, drawPricesAndRooms } from "./utils";
 
-export function CustomCalendar() {
+export function TimelineCalendar() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -88,14 +88,14 @@ export function CustomCalendar() {
               {currentDate.format("MMMM YYYY")}
             </h2>
           </div>
-          {rooms.map((roomType) => (
-            <div key={roomType.id}>
+          {units.map((unitType) => (
+            <div key={unitType.id}>
               <div className="flex h-[50px] items-center rounded bg-muted/40">
                 <p className="px-4 font-semibold tracking-tight">
-                  {roomType.name}
+                  {unitType.name}
                 </p>
               </div>
-              {roomType.rooms.map((room) => (
+              {unitType.units.map((room) => (
                 <div
                   key={room.id}
                   className="flex h-[50px] items-center justify-between px-4"
@@ -116,31 +116,33 @@ export function CustomCalendar() {
             </div>
           ))}
         </div>
+        <div className="relative"></div>
         <div ref={containerRef} className="relative w-full overflow-x-scroll">
           <canvas ref={canvasRef} className="border-collapse" />
           <div className="absolute left-0 top-0">
-            {bookings.map((booking, index) => {
-              const roomType = rooms.find((rt) =>
-                rt.rooms.some((r) => r.id === booking.roomId),
+            {reservations.map((reservation, index) => {
+              const unitType = units.find((rt) =>
+                rt.units.some((r) => r.id === reservation.unitId),
               );
-              const roomIndex =
-                roomType?.rooms.findIndex((r) => r.id === booking.roomId) || 0;
-              const roomTypeIndex = rooms.findIndex(
-                (rt) => rt.id === roomType?.id,
+              const unitIndex =
+                unitType?.units.findIndex((r) => r.id === reservation.unitId) ||
+                0;
+              const unitTypeIndex = units.findIndex(
+                (rt) => rt.id === unitType?.id,
               );
-              const previousRoomTypesCount = rooms
-                .slice(0, roomTypeIndex)
-                .reduce((acc, rt) => acc + rt.rooms.length, 0);
+              const previousRoomTypesCount = units
+                .slice(0, unitTypeIndex)
+                .reduce((acc, rt) => acc + rt.units.length, 0);
 
               const yOffset =
                 50 + // Başlık yüksekliği
-                (roomTypeIndex + 1) * 50 + // Oda tipi başlıkları
-                (previousRoomTypesCount + roomIndex) * 50; // Oda satırı
+                (unitTypeIndex + 1) * 50 + // Oda tipi başlıkları
+                (previousRoomTypesCount + unitIndex) * 50; // Oda satırı
 
               return (
                 <BookingComponent
                   key={index}
-                  booking={booking}
+                  booking={reservation}
                   cellWidth={cellWidth}
                   currentDate={currentDate}
                   yOffset={yOffset}

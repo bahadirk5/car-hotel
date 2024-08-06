@@ -1,4 +1,4 @@
-import { CustomCalendar } from "@/components/room-calendar/calendar";
+import { CustomCalendar } from "@/components/timeline-calendar/calendar";
 
 export default function CalendarPage() {
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { Car, Home, LineChart, Settings } from "lucide-react";
+import { CalendarDays, Car, Home, LineChart, Settings } from "lucide-react";
 import { BusinessSwitcher } from "./business-switcher";
 import { NavItem } from "./nav-item";
 import { Separator } from "@/components/ui/separator";
@@ -49,6 +49,11 @@ const CarRentalNavs = [
     label: "Car List",
     href: "/vendor-dashboard/car/list",
     icon: Car,
+  },
+  {
+    label: "Calendar",
+    href: "/vendor-dashboard/car/calendar",
+    icon: CalendarDays,
   },
 ];
 

@@ -23,14 +23,14 @@ export function CarCard({
 }) {
   return (
     <div className="rounded border p-4" key={id}>
-      <div className="flex gap-1 justify-between items-start">
+      <div className="flex items-start justify-between gap-1">
         <div className="flex items-end gap-1">
           <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
             {brand}
           </h3>
-          <p className="text-sm text-muted-foreground mb-[2px]">{model}</p>
+          <p className="mb-[2px] text-sm text-muted-foreground">{model}</p>
         </div>
-        <div>{car_rental_name}</div>
+        <Badge variant="secondary">{car_rental_name}</Badge>
       </div>
       <Badge variant="outline" className="my-1 text-muted-foreground">
         Or similar car
@@ -43,7 +43,9 @@ export function CarCard({
               ? "/eco.png"
               : segment === "luxury"
                 ? "/lux.png"
-                : "/suv.png"
+                : segment === "standard"
+                  ? "/lux.png"
+                  : "/suv.png"
           }
           priority={true}
           alt="car"
@@ -53,11 +55,23 @@ export function CarCard({
       </div>
       <div>
         <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
-          20€ / day
+          {segment === "economy"
+            ? "20€ / day"
+            : segment === "luxury"
+              ? "60€ / day"
+              : segment === "standard"
+                ? "40€ / day"
+                : "80€ / day"}
         </h4>
         <div className="flex items-center justify-between">
           <p className="text-sm font-semibold tracking-tighter text-muted-foreground">
-            200€ TOTAL PRICE
+          {segment === "economy"
+            ? "200€"
+            : segment === "luxury"
+              ? "600€"
+              : segment === "standard"
+                ? "400€"
+                : "800€"} TOTAL PRICE
           </p>
           <p className="text-sm font-semibold tracking-tighter text-muted-foreground">
             1500 km per rental

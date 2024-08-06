@@ -8,6 +8,7 @@ import {
   integer,
   text,
   primaryKey,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
 
@@ -140,6 +141,63 @@ export const cars = createTable(
     licensePlateIndex: index("cars_license_plate_idx").on(table.license_plate), // Unique index name
     brandIndex: index("cars_brand_idx").on(table.brand), // Unique index name
     modelIndex: index("cars_model_idx").on(table.model), // Unique index name
+  }),
+);
+
+// Car Reservations Table
+export const car_reservations = createTable("car_reservations", {
+  id: serial("id").primaryKey(),
+  car_id: integer("car_id")
+    .references(() => cars.id, { onDelete: "cascade" })
+    .notNull(),
+  car_rental_id: integer("car_rental_id")
+    .references(() => car_rental.id, { onDelete: "cascade" })
+    .notNull(),
+  user_id: text("user_id")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
+  start_date: timestamp("start_date", { withTimezone: true }).notNull(), // Reservation start date
+  end_date: timestamp("end_date", { withTimezone: true }).notNull(), // Reservation end date
+  status: varchar("status", {
+    length: 20,
+    enum: ["pending", "confirmed", "completed", "cancelled"],
+  })
+    .notNull()
+    .default("pending"), // Reservation status
+  created_at: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(), // Timestamp for record creation
+  updated_at: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(), // Timestamp for record update
+});
+
+// Car Availability Table
+export const car_availability = createTable(
+  "car_availability",
+  {
+    id: serial("id").primaryKey(),
+    car_id: integer("car_id")
+      .references(() => cars.id, { onDelete: "cascade" })
+      .notNull(),
+    available_from: timestamp("available_from", {
+      withTimezone: true,
+    }).notNull(),
+    available_to: timestamp("available_to", { withTimezone: true }).notNull(),
+    price_per_day: integer("price_per_day").notNull(),
+    created_at: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updated_at: timestamp("updated_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    uniqueCarAvailability: uniqueIndex("unique_car_availability").on(
+      table.car_id,
+      table.available_from,
+      table.available_to,
+    ),
   }),
 );
 

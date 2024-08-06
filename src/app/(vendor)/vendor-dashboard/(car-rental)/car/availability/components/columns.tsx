@@ -7,18 +7,12 @@ import { MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -32,25 +26,19 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { DataTableColumnHeader } from "../../../../../../../components/data-table/data-table-column-header";
+import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import Link from "next/link";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { carStatuses, CarStatus } from "../types";
-import { deleteCar, setStatus } from "../../actions";
 
-export type CarType = {
+export type AvailabilityType = {
   id: number;
-  brand: string;
-  model: string;
-  license_plate: string;
-  segment: string;
+  available_from: Date;
+  available_to: Date;
+  price_per_day: number;
   created_at: Date;
   updated_at: Date;
-  status: CarStatus;
 };
 
-export const columns: ColumnDef<CarType>[] = [
+export const columns: ColumnDef<AvailabilityType>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -74,42 +62,24 @@ export const columns: ColumnDef<CarType>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "brand",
-    header: "Brand",
-  },
-  {
-    accessorKey: "model",
-    header: "Model",
-  },
-  {
-    accessorKey: "license_plate",
-    header: "License Plate",
-  },
-  {
-    accessorKey: "segment",
-    header: "Segment",
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
+    id: "available_dates",
+    header: "Available Dates",
     cell: ({ row }) => {
-      const status = row.getValue("status");
-      const variant =
-        status === "available"
-          ? "default"
-          : status === "rented"
-            ? "secondary"
-            : status === "maintenance"
-              ? "outline"
-              : status === "reserved"
-                ? "destructive"
-                : "secondary";
+      const availability = row.original
 
-      return <Badge variant={variant}>{row.getValue("status")}</Badge>;
+      const available_from = format(availability.available_from, "PPP");
+      const available_to = format(availability.available_to, "PPP");
+
+      return (
+        <div className="font-medium">
+          {available_from} - {available_to}
+        </div>
+      );
     },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
+  },
+  {
+    accessorKey: "price_per_day",
+    header: "Price Per Day",
   },
   {
     accessorKey: "created_at",
@@ -128,28 +98,6 @@ export const columns: ColumnDef<CarType>[] = [
     cell: ({ row }) => {
       const car = row.original;
 
-      const { mutate: set_status } = useMutation({
-        mutationFn: setStatus,
-        onSuccess: () => {
-          toast.success("Car status updated successfully");
-        },
-        onError: (error) => {
-          console.error("Error updating car status:", error);
-          toast.error(error.message || "Error updating car status");
-        },
-      });
-
-      const { mutate: delete_car } = useMutation({
-        mutationFn: deleteCar,
-        onSuccess: () => {
-          toast.success("Car is deleted successfully");
-        },
-        onError: (error) => {
-          console.error("Error deleting car:", error);
-          toast.error(error.message || "Error deleting car");
-        },
-      });
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -160,35 +108,6 @@ export const columns: ColumnDef<CarType>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(car.license_plate)}
-            >
-              Copy lisance plate
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <Link href={`/vendor-dashboard/car/availability/${car.id}`}>
-              <DropdownMenuItem>Availability</DropdownMenuItem>
-            </Link>
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger>Status</DropdownMenuSubTrigger>
-              <DropdownMenuSubContent>
-                <DropdownMenuRadioGroup
-                  value={car.status}
-                  onValueChange={(value) =>
-                    set_status({
-                      id: car.id,
-                      status: value as CarType["status"],
-                    })
-                  }
-                >
-                  {carStatuses.map((status) => (
-                    <DropdownMenuRadioItem key={status} value={status}>
-                      {status}
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
             <DropdownMenuSeparator />
             <Link href={`/vendor-dashboard/car/edit/${car.id}`}>
               <DropdownMenuItem>Edit</DropdownMenuItem>
@@ -213,7 +132,7 @@ export const columns: ColumnDef<CarType>[] = [
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => delete_car(car.id)}>
+                  <AlertDialogAction onClick={() => (console.log(car.id))}>
                     Continue
                   </AlertDialogAction>
                 </AlertDialogFooter>

@@ -1,7 +1,7 @@
 import React from "react";
 import dayjs from "dayjs";
 
-import { Booking } from "./data";
+import { Reservation } from "./data";
 import { cn } from "@/lib/utils";
 
 import {
@@ -11,7 +11,14 @@ import {
 } from "@/components/ui/hover-card";
 
 interface Props {
-  booking: Booking;
+  booking: {
+    id: number;
+    unitId: number;
+    startDate: string;
+    endDate: string;
+    guestName: string;
+    status: string;
+  };
   cellWidth: number;
   currentDate: dayjs.Dayjs;
   yOffset: number;
@@ -48,22 +55,30 @@ const BookingComponent: React.FC<Props> = ({
     marginRight: "4px", // Yan yana rezervasyonlar arasına boşluk ekler
   };
 
+  const startDate = dayjs(booking.startDate);
+  const endDate = dayjs(booking.endDate);
+
   return (
     <div className="relative mr-2">
       <HoverCard>
         <HoverCardTrigger
-          className={cn(
-            "absolute flex h-10 items-center rounded-lg px-2 shadow",
-            booking.status === "confirmed" &&
-              "bg-blue-400 text-primary-foreground hover:bg-blue-400/90",
-            booking.status === "checked-in" &&
-              "bg-yellow-400 text-primary-foreground hover:bg-yellow-400/90",
-            booking.status === "checked-out" &&
-              "bg-green-400 text-primary-foreground hover:bg-green-400/90",
-          )}
+          // className={cn(
+          //   "absolute flex h-10 items-center rounded-lg px-2 shadow",
+          //   booking.status === "confirmed" &&
+          //     "bg-blue-400 text-primary-foreground hover:bg-blue-400/90",
+          //   booking.status === "checked-in" &&
+          //     "bg-yellow-400 text-primary-foreground hover:bg-yellow-400/90",
+          //   booking.status === "checked-out" &&
+          //     "bg-green-400 text-primary-foreground hover:bg-green-400/90",
+          // )}
+          className="absolute flex h-10 items-center justify-between rounded-lg border bg-primary px-2 text-xs text-primary-foreground"
           style={styles}
         >
-          {booking.guestName}
+          <span>{booking.guestName}</span>
+          <span>
+            {startDate.format("DD")} - {endDate.format("DD")}{" "}
+            {endDate.format("MMM")}
+          </span>
         </HoverCardTrigger>
         <HoverCardContent className="w-80 rounded-md bg-white p-4 shadow-lg dark:bg-gray-950">
           <div className="mb-2 flex items-center justify-between">
@@ -90,7 +105,7 @@ const BookingComponent: React.FC<Props> = ({
             </li>
             <li className="flex items-center justify-between">
               <span className="text-muted-foreground">Room:</span>
-              <span className="text-sm font-semibold">{booking.roomId}</span>
+              <span className="text-sm font-semibold">{booking.unitId}</span>
             </li>
           </ul>
         </HoverCardContent>

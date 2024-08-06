@@ -18,7 +18,6 @@ export default async function VendorLayout({ children }: LayoutProps) {
   if (!vendor) {
     return notFound();
   }
-  console.log(vendor);
   const businesses = (await getBusinessByVendorID(vendor.id)) || [];
 
   return (
